@@ -1,0 +1,17 @@
+- name: Deploy Hello WAR to Tomcat
+  hosts: webserver
+  tasks:
+    - name: Copy WAR to Tomcat
+      copy:
+        src: ~/labs/gitlearn/mypearl/build/hello.war
+        dest: ~/cicdtools/tomcat/apache-tomcat-8.5.100/webapps/hello.war
+        mode: '0644'
+
+    - name: Restart Tomcat (stop)
+      shell: "{{ item }}"
+      args:
+        chdir: ~/cicdtools/tomcat/apache-tomcat-8.5.100/bin
+      with_items:
+        - ./shutdown.sh || true
+        - ./startup.sh
+
